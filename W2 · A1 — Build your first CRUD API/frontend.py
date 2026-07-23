@@ -1,7 +1,10 @@
 import streamlit as sl
 import requests as rq
 sl.header("Api test site.")
-button = sl.button("Call API")
+button1 = sl.button("Call the root API")
 url = "http://127.0.0.1:8000"
-if button:
+if button1:
        sl.write(rq.get(url).json())
+button2 = sl.button("Call the health API.")
+if button2:
+       sl.write(rq.get(url + "/health").json())
