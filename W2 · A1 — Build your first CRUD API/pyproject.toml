@@ -1,0 +1,5 @@
+[project]
+name = "API-controller"
+version = "4.0.0"
+[tool.fastapi]
+entrypoint = "controller:app"
