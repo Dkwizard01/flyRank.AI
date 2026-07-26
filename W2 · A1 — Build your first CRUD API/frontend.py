@@ -14,7 +14,7 @@ if health_button:
 tasks_button = sl.button("Get all tasks.")
 if tasks_button:
        sl.write(rq.get(f"{url}/tasks").json())
-task_button = sl.button("Get an item from the list using the item's id.")
+task_button = sl.button("Get a task from the list using the item's id.")
 if (get_task.strip() != "" and task_button):
               sl.write(rq.get(f"{url}/tasks/{get_task}").json())
 add_button = sl.button("Add new task. Enter a title and information whether the task is done (False/True)")
