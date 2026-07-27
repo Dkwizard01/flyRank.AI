@@ -4,6 +4,7 @@ sl.header("Api test site.")
 get_task = sl.text_input("Enter task ID:")
 add_title = sl.text_input("Enter the task's title:")
 done_input = sl.text_input("Is the task done? (True or False):")
+search_term = sl.text_input("Enter the text to search for in tasks' titles:")
 filter_true = sl.checkbox("Display done tasks")
 filter_false = sl.checkbox("Display not done tasks")
 button1 = sl.button("Call the root API")
@@ -37,3 +38,6 @@ if filter_true:
         sl.write(rq.get(f"{url}/tasks/?done=true").json())
 if filter_false:
         sl.write(rq.get(f"{url}/tasks/?done=false").json())
+search_button = sl.button("Search for text in tasks' titles.")
+if search_button:
+        sl.write(rq.get(f"{url}/tasks/?search={search_term}").json())

@@ -18,12 +18,15 @@ async def root() -> dict[str, Any]:
 async def health():
    return { "status": "ok" } 
 @app.get("/tasks", summary="Gets all tasks.")
-async def tasks(done: str | None = None):
+async def tasks(done: str | None = None, search : str | None = None):
     if done != None and  done.casefold() == "true":
       return (task for task in task_list if task["done"] == "True")
     elif done != None and done.casefold() == "false":
       return (task for task in task_list if task["done"] == "False")
-    
+    if search != None and search != "":
+       for task in task_list:
+          if search in task["title"]:
+             return task
     return task_list
 @app.get("/tasks/{id}", summary="Gets a task from the list using the item's id.")
 async def get_task(id:str):
