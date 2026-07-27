@@ -4,6 +4,8 @@ sl.header("Api test site.")
 get_task = sl.text_input("Enter task ID:")
 add_title = sl.text_input("Enter the task's title:")
 done_input = sl.text_input("Is the task done? (True or False):")
+filter_true = sl.checkbox("Display done tasks")
+filter_false = sl.checkbox("Display not done tasks")
 button1 = sl.button("Call the root API")
 url = "http://127.0.0.1:8000"
 if button1:
@@ -31,4 +33,7 @@ if update_button:
 delete_button = sl.button("Delete a task by entering its ID.")
 if get_task != "" and delete_button:
         sl.write(rq.delete(f"{url}/tasks/{get_task}").json())   
-        
+if filter_true:
+        sl.write(rq.get(f"{url}/tasks/?done=true").json())
+if filter_false:
+        sl.write(rq.get(f"{url}/tasks/?done=false").json())
