@@ -9,10 +9,10 @@ To install this Streamlit task app, simply clone the project files and first run
 ```
 pip install -r requirements.txt
 ```
-** This commmand is used to install the required packages and must be run in the directory where the `requirements.txt` file is located.
+**This commmand is used to install the required packages and must be run in the directory where the `requirements.txt` file is located.**
 **Note:** When installing packages it is recommended to install them in a virtual environment. You can create a virtual environment by running the commmand:
 
-````
+```
 python -m venv <the desired name of your virtual environment>
 ```
 
@@ -20,7 +20,7 @@ python -m venv <the desired name of your virtual environment>
 ```
 fastapi dev   
 ``` 
-** The command must be run in the directory where the `controller.py` file is located. **
+**The command must be run in the directory where the `controller.py` file is located.**
 
 After the backend starts, run the following command to start the streamlit web app:
 
@@ -28,35 +28,35 @@ After the backend starts, run the following command to start the streamlit web a
 streamlit run frontend.py
 ```
 
-** The command must be run in the directory where the `frontend.py` file is located. **
+**The command must be run in the directory where the `frontend.py` file is located.**
 ### Usage ###
 You can view the app on localhost or your local network to start adding tasks.
 
 ## Streamlit web UI ##
- ![Streamlit 1](<W2 · A1 — Build your first CRUD API/Streamlit 1.png>) 
+ ![Streamlit 1](<Streamlit 1.png>) 
  
- ![Streamlit 2](<W2 · A1 — Build your first CRUD API/Streamlit 2.png>) 
+ ![Streamlit 2](<Streamlit 2.png>) 
  
- ![Streamlit 3](<W2 · A1 — Build your first CRUD API/Streamlit 3.png>) 
+ ![Streamlit 3](<Streamlit 3.png>) 
  
- ![Streamlit 4](<W2 · A1 — Build your first CRUD API/Streamlit 4.png>) 
+ ![Streamlit 4](<Streamlit 4.png>) 
  
- ![Streamlit 5](<W2 · A1 — Build your first CRUD API/Streamlit 5.png>) 
+ ![Streamlit 5](<Streamlit 5.png>) 
  
- ![Streamlit 6](<W2 · A1 — Build your first CRUD API/Streamlit 6.png>) 
+ ![Streamlit 6](<Streamlit 6.png>) 
  
- ![Streamlit 7](<W2 · A1 — Build your first CRUD API/Streamlit 7.png>) 
+ ![Streamlit 7](<Streamlit 7.png>) 
  
- ![Streamlit 8](<W2 · A1 — Build your first CRUD API/Streamlit 8.png>)
+ ![Streamlit 8](<Streamlit 8.png>)
 ## Swagger UI ##
 
-![Swagger UI 1](W2%20·%20A1%20—%20Build%20your%20first%20CRUD%20 API/Swagger%20UI%201.png)
-![Swagger UI 2](W2%20·%20A1%20—%20Build%20your%20first%20CRUD%20 API/Swagger%20UI%202.png)
-![Swagger UI 3](W2%20·%20A1%20—%20Build%20your%20first%20CRUD%20 API/Swagger%20UI%203.png)
-![Swagger UI 4](W2%20·%20A1%20—%20Build%20your%20first%20CRUD%20 API/Swagger%20UI%204.png)
-![Swagger UI 5](W2%20·%20A1%20—%20Build%20your%20first%20CRUD%20 API/Swagger%20UI%205.png)
-![Swagger UI 6](W2%20·%20A1%20—%20Build%20your%20first%20CRUD%20 API/Swagger%20UI%206.png)
-![Swagger UI 7](W2%20·%20A1%20—%20Build%20your%20first%20CRUD%20 API/Swagger%20UI%207.png)
+![Swagger UI 1](Swagger%20UI%201.png)
+![Swagger UI 2](Swagger%20UI%202.png)
+![Swagger UI 3](Swagger%20UI%203.png)
+![Swagger UI 4](Swagger%20UI%204.png)
+![Swagger UI 5](Swagger%20UI%205.png)
+![Swagger UI 6](Swagger%20UI%206.png)
+![Swagger UI 7](Swagger%20UI%207.png)
 
 **Example curl command (PowerShell):**
 ```powershell
@@ -64,17 +64,22 @@ curl.exe -i --% -X PUT http://localhost:8000/tasks/1 -H "Content-Type: applicati
 ```
 
 **Expected response:**
-`HTTP/1.1 200 OK
-date: Sun, 26 Jul 2026 20:29:11 GMT
-server: uvicorn
-content-length: 50
-content-type: application/json
 
-{"id":"1","title":"Buy milk","done":"Task update"}`
+`HTTP/1.1 200 OK`
+
+`date: Sun, 26 Jul 2026 20:29:11 GMT`
+
+`server: uvicorn`
+
+`content-length: 50`
+
+`content-type: application/json`
+
+`{"id":"1","title":"Buy milk","done":"Task update"}`
 
 ## Endpoint table ##
 | Endpoint | Request body contents | Endpoint description|
-|--------------|----------------------|
+|----------|-----------------------|---------------------|
 | `GET /` | `None` | `Calls the the root information API.`|
 | `GET /health` | `None` | `Calls the health API.`|
 | `GET /tasks` | `None` | `Gets all tasks.`|
