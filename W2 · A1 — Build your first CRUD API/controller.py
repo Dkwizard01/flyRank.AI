@@ -41,15 +41,16 @@ async def update_task(id:str, title: str = fastapi.Body(default="", embed=True),
    if title != "" and done != "":
             for task in task_list:
                if task["id"] == id:
-                  task["title"] = title
-                  task["done"] = done
-               return task
+
+                   task["title"] = title
+                   task["done"] = done
+                   return task
             raise fastapi.HTTPException(status_code=404, detail="Unknown id")
    elif title != "":
     for task in task_list:
         if task["id"] == id:
-           task["title"] = title
-           return task
+            task["title"] = title
+            return task
     raise fastapi.HTTPException(status_code=404, detail="Unknown id")
    elif done != "":
          for task in task_list:

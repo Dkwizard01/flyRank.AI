@@ -2,8 +2,8 @@ import streamlit as sl
 import requests as rq
 sl.header("Api test site.")
 get_task = sl.text_input("Enter task ID:")
-add_title = sl.text_input("Enter a the new task's title:")
-done_input = sl.text_input("Enter the task's status (True or False):")
+add_title = sl.text_input("Enter the task's title:")
+done_input = sl.text_input("Is the task done? (True or False):")
 button1 = sl.button("Call the root API")
 url = "http://127.0.0.1:8000"
 if button1:
@@ -17,7 +17,7 @@ if tasks_button:
 task_button = sl.button("Get a task from the list using the item's id.")
 if (get_task.strip() != "" and task_button):
               sl.write(rq.get(f"{url}/tasks/{get_task}").json())
-add_button = sl.button("Add new task. Enter a title and information whether the task is done (False/True)")
+add_button = sl.button("Add a new task. Enter a title and information whether the task is done (False/True)")
 if (add_title.strip() != "" and done_input.strip() != "" and add_button):
         sl.write(rq.post(f"{url}/tasks", json={"title": add_title.strip(), "done": done_input.strip()}).json())
 update_button = sl.button("Update a task by adding a title, information whether the task is done (False/True) or both.")
