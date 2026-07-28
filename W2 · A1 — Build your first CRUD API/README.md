@@ -84,7 +84,14 @@ curl.exe -i --% -X PUT http://localhost:8000/tasks/1 -H "Content-Type: applicati
 | `GET /health` | `None` | `Calls the health API.`|
 | `GET /tasks` | `None` | `Gets all tasks.`|
 | `GET /tasks/{id}` | `None` | `Gets a task from the list using the item's id.`|
+|`GET /tasks/?done`  | `None` | `Gets all done tasks if the query parameter is set to true. Gets all tasks that are not done if the query parametar is set to false`|
+|`GET /tasks/?search`  | `None` | `Gets tasks whose titles' contain the specified keyword(s)`|
+|`GET /tasks/?done`  | `None` | `Gets all done tasks if the query parameter is set to true. Gets all tasks that are not done if the query parametar is set to false`|
+|`GET /stats`  | `None` | `Gets the total number of tasks, tasks that are done and tasks that are not done.`|
 | `POST /tasks` | `title: **str**, done: **str**` | `Adds a task by adding a title, information whether the task is done (False/True) or both.`|
+|`POST /reset`  | `None` | `Resets the amount of tasks to default (3).`|
 | `PUT /tasks/{id}` | `title: **str**, done: **str**` | `Updates a task by adding a title, information whether the task is done (False/True) or both.`|
 | `DELETE /tasks/{id}` | `None` | `Deletes a task by entering its ID.`|
 
+## Issues ##
+The task list is not stored in a database, rather it is stored in an in-memory list. Because of that the task list resets every time the server is restarted. 

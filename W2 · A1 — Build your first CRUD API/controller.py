@@ -17,7 +17,7 @@ async def root() -> dict[str, Any]:
 @app.get("/health", summary="Calls the health API.")
 async def health():
    return { "status": "ok" } 
-@app.get("/tasks", summary="Gets all tasks.")
+@app.get("/tasks", summary="Gets all tasks. Ability to search through tasks titles and filter tasks by status")
 async def tasks(done: str | None = None, search : str | None = None):
     if done != None and  done.casefold() == "true":
       return (task for task in task_list if task["done"] == "True")
@@ -28,50 +28,51 @@ async def tasks(done: str | None = None, search : str | None = None):
           if search in task["title"]:
              return task
     return task_list
-@app.get("/tasks/{id}", summary="Gets a task from the list using the item's id.")
-async def get_task(id:str):
+@app.get("/tasks/{id}", summary="Gets a task from the list using the task's id.")
+async def get_task(id:int):
      for task in task_list:
-         if task["id"] == id:
+         if task["id"] == str(id):
           return task
      raise fastapi.HTTPException(status_code=404, detail="error:" f"Task {id} not found")
+@app.get("/stats", summary="Returns task list statistics.")
+async def get_stats():
+   done_tasks = 0
+   open_tasks = 0
+   for task in task_list:
+      if task["done"] == "True":
+         done_tasks += 1
+      else:
+         open_tasks += 1
+   return {"total": len(task_list), "done": done_tasks, "open": open_tasks}
 @app.post("/tasks", summary="Adds a new task. Enter a title and information whether the task is done (False/True)")
 # Added default = "" to bypass Pydantic's default validation mechanism.
-async def add_task(title: str = fastapi.Body(default="", embed=True), done: str = fastapi.Body(default = "", embed=True)):
-    if title != "" and done != "":
+async def add_task(title: str = fastapi.Body(default="", embed=True), done: bool = fastapi.Body(default = "", embed=True)):
+    if title != "":
       task = {"id": f"{str(len(task_list) + 1)}", "title": f"{title}", "done": f"{done}"}
       task_list.append(task)
       return task
     else:
       raise fastapi.HTTPException(status_code=400, detail="Title cannot be empty.")  
+@app.post("/reset", summary="Reset the task list to the default tasks.")
+async def reset():
+   del task_list[len(task_list):3:-1]
+   return {"Detail": "Reset the task list to the default tasks." }
 @app.put("/tasks/{id}", summary="Updates a task by adding a title, information whether the task is done (False/True) or both.")
-async def update_task(id:str, title: str = fastapi.Body(default="", embed=True), done: str = fastapi.Body(default = "", embed=True)):
+async def update_task(id:int, title: str = fastapi.Body(default="", embed=True), done: bool = fastapi.Body(default = "", embed=True)):
 # Added the option to set the task's status on creation. Scenario: Maybe a user wants to simply record a task they have finished.
-   if title != "" and done != "":
+   if title != "":
             for task in task_list:
-               if task["id"] == id:
-
+               if task["id"] == str(id):
                    task["title"] = title
-                   task["done"] = done
+                   task["done"] = str(done)
                    return task
             raise fastapi.HTTPException(status_code=404, detail="Unknown id")
-   elif title != "":
-    for task in task_list:
-        if task["id"] == id:
-            task["title"] = title
-            return task
-    raise fastapi.HTTPException(status_code=404, detail="Unknown id")
-   elif done != "":
-         for task in task_list:
-            if task["id"] == id:
-               task["done"] = done
-               return task
-         raise fastapi.HTTPException(status_code=404, detail="Unknown id")
    else:
       raise fastapi.HTTPException(status_code=400, detail="Empty/invalid body")
 @app.delete("/tasks/{id}", summary="Deletes a task by entering its ID.")
-async def delete_task(id:str) -> dict[str, Any]:
+async def delete_task(id:int) -> dict[str, Any]:
    for task in task_list:
-      if task["id"] == id:
+      if task["id"] == str(id):
          del task_list[int(id) - 1]
          return {"status": 204, "detail": "No Content" }
    raise fastapi.HTTPException(status_code=404, detail="Unknown id")
