@@ -17,7 +17,7 @@ async def root() -> dict[str, Any]:
 @app.get("/health", summary="Calls the health API.")
 async def health():
    return { "status": "ok" } 
-@app.get("/tasks", summary="Gets all tasks. Ability to search through tasks titles and filter tasks by status")
+@app.get("/tasks", summary="Gets all tasks. Ability to search through tasks' titles and filter tasks by status")
 async def tasks(done: str | None = None, search : str | None = None):
     if done != None and  done.casefold() == "true":
       return (task for task in task_list if task["done"] == "True")
