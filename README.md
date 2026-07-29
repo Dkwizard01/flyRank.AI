@@ -1,4 +1,2 @@
-# FlyRank AI #
-This repository contains files for the free, online and non-paid FlyRank AI internship. See:
-
-https://internship.flyrank.ai/
+# Bonus: the AI rematch  #
+This branch contains files for the version of the project done by the 14b Phi 4 model.
