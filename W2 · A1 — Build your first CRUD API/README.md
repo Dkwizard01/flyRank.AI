@@ -33,30 +33,23 @@ streamlit run frontend.py
 You can view the app on localhost or your local network to start adding tasks.
 
 ## Streamlit web UI ##
- ![Streamlit 1](<Streamlit 1.png>) 
- 
- ![Streamlit 2](<Streamlit 2.png>) 
- 
- ![Streamlit 3](<Streamlit 3.png>) 
- 
- ![Streamlit 4](<Streamlit 4.png>) 
- 
- ![Streamlit 5](<Streamlit 5.png>) 
- 
- ![Streamlit 6](<Streamlit 6.png>) 
- 
- ![Streamlit 7](<Streamlit 7.png>) 
- 
- ![Streamlit 8](<Streamlit 8.png>)
+![Streamlit 1](<Images/Streamlit/Streamlit 1.png>) 
+![Streamlit 2](<Images/Streamlit/Streamlit 2.png>) 
+![Streamlit 3](<Images/Streamlit/Streamlit 3.png>) 
+![Streamlit 4](<Images/Streamlit/Streamlit 4.png>) 
+![Streamlit 5](<Images/Streamlit/Streamlit 5.png>) 
+![Streamlit 6](<Images/Streamlit/Streamlit 6.png>) 
+![Streamlit 7](<Images/Streamlit/Streamlit 7.png>) 
+![Streamlit 6](<Images/Streamlit/Streamlit 8.png>)
 ## Swagger UI ##
 
-![Swagger UI 1](Swagger%20UI%201.png)
-![Swagger UI 2](Swagger%20UI%202.png)
-![Swagger UI 3](Swagger%20UI%203.png)
-![Swagger UI 4](Swagger%20UI%204.png)
-![Swagger UI 5](Swagger%20UI%205.png)
-![Swagger UI 6](Swagger%20UI%206.png)
-![Swagger UI 7](Swagger%20UI%207.png)
+![Swagger UI 1](<Images/SwaggerUI/Swagger UI 1.png>) 
+![Swagger UI 2](<Images/SwaggerUI/Swagger UI 2.png>) 
+![Swagger UI 3](<Images/SwaggerUI/Swagger UI 3.png>) 
+![Swagger UI 4](<Images/SwaggerUI/Swagger UI 4.png>) 
+![Swagger UI 5](<Images/SwaggerUI/Swagger UI 5.png>) 
+![Swagger UI 6](<Images/SwaggerUI/Swagger UI 6.png>) 
+![Swagger UI 7](<Images/SwaggerUI/Swagger UI 7.png>)
 
 **Example curl command (PowerShell):**
 ```powershell
