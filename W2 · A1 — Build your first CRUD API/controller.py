@@ -1,5 +1,10 @@
 import fastapi
 from typing import Any
+import sys
+import os
+sys.path.append(os.path.abspath(r"C:\Users\DK\source\repos\flyRank.AI\W3 · A1 — Connecting your CRUD to the database"))
+import database
+
 app = fastapi.FastAPI()
 task_list = [
    { "id": "1", "title": "First task.", "done": "True" },
@@ -27,13 +32,14 @@ async def tasks(done: str | None = None, search : str | None = None):
        for task in task_list:
           if search in task["title"]:
              return task
-    return task_list
+    return database.get_all()
 @app.get("/tasks/{id}", summary="Gets a task from the list using the task's id.")
 async def get_task(id:int):
-     for task in task_list:
-         if task["id"] == str(id):
-          return task
-     raise fastapi.HTTPException(status_code=404, detail="error:" f"Task {id} not found")
+          task = database.search_by_id(id)
+          if task is not None:
+           return task
+          else:
+           raise fastapi.HTTPException(status_code=404, detail="error:" f"Task {id} not found")
 @app.get("/stats", summary="Returns task list statistics.")
 async def get_stats():
    done_tasks = 0

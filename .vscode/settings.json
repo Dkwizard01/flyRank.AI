@@ -1,0 +1,6 @@
+{
+    "python.analysis.addExtraPathsForPythonProjects": true,
+    "python.analysis.extraPaths": [
+        "C:\\Users\\DK\\source\\repos\\flyRank.AI\\W3 · A1 — Connecting your CRUD to the database"
+    ]
+}
