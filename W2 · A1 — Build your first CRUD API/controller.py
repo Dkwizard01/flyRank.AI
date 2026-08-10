@@ -52,11 +52,10 @@ async def get_stats():
    return {"total": len(task_list), "done": done_tasks, "open": open_tasks}
 @app.post("/tasks", summary="Adds a new task. Enter a title and information whether the task is done (False/True)")
 # Added default = "" to bypass Pydantic's default validation mechanism.
-async def add_task(title: str = fastapi.Body(default="", embed=True), done: bool = fastapi.Body(default = "", embed=True)):
+async def add_task(title: str = fastapi.Body(default="", embed=True), done: bool = fastapi.Body(default = "", embed=True)) -> dict[str, int | str]:
     if title != "":
-      task = {"id": f"{str(len(task_list) + 1)}", "title": f"{title}", "done": f"{done}"}
-      task_list.append(task)
-      return task
+      database.insert(title, done)
+      return {"status code": 201, "detail": "Task added successfully"}
     else:
       raise fastapi.HTTPException(status_code=400, detail="Title cannot be empty.")  
 @app.post("/reset", summary="Reset the task list to the default tasks.")

@@ -39,3 +39,15 @@ def search_by_id(task_id:int):
    cursor.execute("SELECT * FROM tasks WHERE id = (?) LIMIT 1;", [task_id])
    selected = cursor.fetchone()
    return dict(selected) if selected else None
+def insert(title:str, done:int):
+   cursor = connection.cursor()
+   try:
+    cursor.execute("INSERT INTO tasks (title, done) VALUES (?,?);", [title, done])
+    connection.commit()
+   except sqlite3.IntegrityError as e:
+      print(f"Error: Integrity constraint violated: {e}")
+   except sqlite3.OperationalError as e:
+        print(f"Error: Operational error: {e}")
+   except Exception as e:
+        print(f"An exception occurred: {e}")
+   return cursor.lastrowid
