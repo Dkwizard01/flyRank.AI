@@ -3,7 +3,8 @@ import requests as rq
 sl.header("To-do task app API test site.")
 get_task = sl.text_input("Enter task ID:")
 add_title = sl.text_input("Enter the task's title:")
-done_input = sl.checkbox("Is the task done? Checked: Done. Unchecked: Not done.")
+done_input = sl.checkbox("Checked: The task is done.")
+not_done_input = sl.checkbox("Checked: The task is not done.")
 search_term = sl.text_input("Enter the text to search for in tasks' titles:")
 filter_true = sl.checkbox("Display done tasks")
 filter_false = sl.checkbox("Display not done tasks")
@@ -26,9 +27,16 @@ if (add_title.strip() != "" and add_button):
 update_button = sl.button("Update a task by adding a title, information whether the task is done (False/True) or both.")
 if update_button:
    if add_title != "":
-           sl.write(rq.put(f"{url}/tasks/{get_task}", json={"title": add_title.strip(), "done": done_input}).json())
-   else:
-              sl.write(rq.put(f"{url}/tasks/{get_task}", json={"done": done_input}).json())
+           if done_input:
+            sl.write(rq.put(f"{url}/tasks/{get_task}", json={"title": add_title.strip(), "done": done_input}).json())
+           elif not_done_input:
+            sl.write(rq.put(f"{url}/tasks/{get_task}", json={"title": add_title.strip(), "done": not_done_input}).json())
+   else:  
+          if done_input:
+                 sl.write(rq.put(f"{url}/tasks/{get_task}", json={"done": done_input}).json())
+          elif not_done_input:
+                 sl.write(rq.put(f"{url}/tasks/{get_task}", json={"done": not_done_input}).json())
+
 
 # The backend could be queried to find out whether the task has already been set to done or not done before updating it,
 # but that would involve making an extra API call, which would ultimately reduce response time. 

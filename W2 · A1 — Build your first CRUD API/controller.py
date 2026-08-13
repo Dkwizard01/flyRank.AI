@@ -65,19 +65,16 @@ async def reset():
 @app.put("/tasks/{id}", summary="Updates a task by adding a title, information whether the task is done (False/True) or both.")
 async def update_task(id:int, title: str = fastapi.Body(default="", embed=True), done: bool = fastapi.Body(default = "", embed=True)):
 # Added the option to set the task's status on creation. Scenario: Maybe a user wants to simply record a task they have finished.
-   if title != "":
-            for task in task_list:
-               if task["id"] == str(id):
-                   task["title"] = title
-                   task["done"] = str(done)
-                   return task
-            raise fastapi.HTTPException(status_code=404, detail="Unknown id")
+   if title != "" or done != False:
+            result = database.update_task(id, title, done)
+            if result["status_code"] != 200:
+             raise fastapi.HTTPException(status_code=404, detail="Unknown id")
    else:
       raise fastapi.HTTPException(status_code=400, detail="Empty/invalid body")
+   return result
 @app.delete("/tasks/{id}", summary="Deletes a task by entering its ID.")
 async def delete_task(id:int) -> dict[str, Any]:
-   for task in task_list:
-      if task["id"] == str(id):
-         del task_list[int(id) - 1]
-         return {"status": 204, "detail": "No Content" }
-   raise fastapi.HTTPException(status_code=404, detail="Unknown id")
+   result = database.delete_task(id)
+   if result["status_code"] != 204:
+    raise fastapi.HTTPException(status_code=404, detail="Unknown id")
+   return result
