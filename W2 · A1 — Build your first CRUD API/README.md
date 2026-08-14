@@ -1,5 +1,5 @@
 # FlyRank AI #
-This repository contains files for _W2 · A1 — Build your first CRUD API_ of the free, online and non-paid FlyRank AI internship. See:
+This directory contains files for _W2 · A1 — Build your first CRUD API_ of the free, online and non-paid FlyRank AI internship. See:
 
 https://internship.flyrank.ai/
 

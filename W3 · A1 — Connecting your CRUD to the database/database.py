@@ -7,7 +7,7 @@ database_dir = base_dir / "tasks.db"
 connection = sqlite3.connect(database_dir)
 connection.row_factory = sqlite3.Row
 
-def set_up():
+def set_up() -> dict[str, Any] | None:
  cursor = connection.cursor()
  cursor.execute(
     """
@@ -27,6 +27,8 @@ def set_up():
     ( 3, 'Third task.', 0)
    ]
      cursor.executemany("INSERT INTO tasks (id, title, done) VALUES (?,?,?);", to_insert)
+ else:
+    return {"status_code": 204, "detail": "No Content"}
  connection.commit()
 def get_all():
    cursor = connection.cursor()
@@ -104,3 +106,4 @@ def delete_task(id:int) -> dict[str, Any]:
    if cursor.rowcount == 0:
      return {"status_code":404, "detail":"Unknown id"}
    return {"status": 204, "detail": "No Content" }
+set_up()
