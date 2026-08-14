@@ -18,4 +18,11 @@ The database file is named `tasks.db` and is stored in the ```W3 · A2 — Conne
 
 ![Database data](<images/DB data.jpg>)
 
-## 
+## Example command ##
+**One example group of SQL commmands:**
+"""
+      UPDATE tasks
+      SET title = ?, done = ?
+      WHERE id = ?;
+       """
+    - This command is run using the execute() function which is a part of the cursor class.
