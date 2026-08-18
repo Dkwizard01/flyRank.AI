@@ -23,16 +23,24 @@ async def root() -> dict[str, Any]:
 async def health():
    return { "status": "ok" } 
 @app.get("/tasks", summary="Gets all tasks. Ability to search through tasks' titles and filter tasks by status")
-async def tasks(done: str | None = None, search : str | None = None):
-    if done != None and  done.casefold() == "true":
-      return (task for task in task_list if task["done"] == "True")
-    elif done != None and done.casefold() == "false":
-      return (task for task in task_list if task["done"] == "False")
-    if search != None and search != "":
-       for task in task_list:
-          if search in task["title"]:
-             return task
-    return database.get_all()
+async def tasks(done: bool | None = None, search : str | None = None, alphabetically: bool | None = None):
+     if search:
+        search_result = database.search_in_title(search)
+        if search_result: 
+           return search_result
+        else:
+         raise fastapi.HTTPException(status_code=404, detail="error:" f"No titles containig {search} were found")
+
+     if done:
+         filter_result = database.filter_status(done)
+         if filter_result:
+            return filter_result
+         else:
+          raise fastapi.HTTPException(status_code=404, detail="error:" "No task with the selected status was found.")
+         
+     if alphabetically:
+        database.sort_alphabetically()
+     return database.get_all()
 @app.get("/tasks/{id}", summary="Gets a task from the list using the task's id.")
 async def get_task(id:int):
           task = database.search_by_id(id)
@@ -42,14 +50,7 @@ async def get_task(id:int):
            raise fastapi.HTTPException(status_code=404, detail="error:" f"Task {id} not found")
 @app.get("/stats", summary="Returns task list statistics.")
 async def get_stats():
-   done_tasks = 0
-   open_tasks = 0
-   for task in task_list:
-      if task["done"] == "True":
-         done_tasks += 1
-      else:
-         open_tasks += 1
-   return {"total": len(task_list), "done": done_tasks, "open": open_tasks}
+   return database.stats()
 @app.post("/tasks", summary="Adds a new task. Enter a title and information whether the task is done (False/True)")
 # Added default = "" to bypass Pydantic's default validation mechanism.
 async def add_task(title: str = fastapi.Body(default="", embed=True), done: bool = fastapi.Body(default = "", embed=True)) -> dict[str, int | str]:

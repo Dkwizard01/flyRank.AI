@@ -44,16 +44,20 @@ if update_button:
 delete_button = sl.button("Delete a task by entering its ID.")
 if get_task != "" and delete_button:
         sl.write(rq.delete(f"{url}/tasks/{get_task}").json())   
-if filter_true:
-        sl.write(rq.get(f"{url}/tasks/?done=true").json())
-if filter_false:
-        sl.write(rq.get(f"{url}/tasks/?done=false").json())
 search_button = sl.button("Search for text in tasks' titles.")
 if search_button:
         sl.write(rq.get(f"{url}/tasks/?search={search_term}").json())
+display_button = sl.button("Return tasks ordered by title.")
+if display_button:
+         sl.write(rq.get(f"{url}/tasks/?search").json())
+
 stats_button = sl.button("Get total number of tasks, done tasks and open tasks.")
 if stats_button:
         sl.write(rq.get(f"{url}/stats").json())
 reset_button = sl.button("Reset the task list to default")
 if reset_button:
         sl.write(rq.post(f"{url}/reset").json())
+if filter_true:
+        sl.write(rq.get(f"{url}/tasks/?done=true").json())
+if filter_false:
+        sl.write(rq.get(f"{url}/tasks/?done=false").json())

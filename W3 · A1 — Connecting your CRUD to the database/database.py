@@ -15,6 +15,8 @@ def set_up() -> dict[str, Any] | None:
     id INTEGER PRIMARY KEY,
     title TEXT,
     done INTEGER
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
     """
  )
@@ -29,18 +31,19 @@ def set_up() -> dict[str, Any] | None:
      cursor.executemany("INSERT INTO tasks (id, title, done) VALUES (?,?,?);", to_insert)
  else:
     return {"status_code": 204, "detail": "No Content"}
+ 
  connection.commit()
-def get_all():
+def get_all() -> list[dict[str, Any]]:
    cursor = connection.cursor()
    cursor.execute("SELECT * FROM tasks")
    tasks = cursor.fetchall()
+   return [{**dict(row), "done": str(bool(row["done"]))} for row in tasks]
 
-   return [dict(row) for row in tasks]
-def search_by_id(task_id:int):
+def search_by_id(task_id:int) -> dict[Any | str, Any | str] | None:
    cursor = connection.cursor()
    cursor.execute("SELECT * FROM tasks WHERE id = (?) LIMIT 1;", [task_id])
    selected = cursor.fetchone()
-   return dict(selected) if selected else None
+   return {**dict(selected), "done": str(bool(selected["done"]))} if selected else None
 def insert(title:str, done:int):
    cursor = connection.cursor()
    try:
@@ -60,21 +63,21 @@ def update_task(id:int, title:str | None = None, done:int | None = None) -> dict
     if title is not None:
      cursor.execute("""
       UPDATE tasks
-      SET title = ?
+      SET title = ?, updated_at = CURRENT_TIMESTAMP
       WHERE id = ?;
        """, params[0::2]
     )
     elif done is not None:
         cursor.execute("""
             UPDATE tasks
-            SET done = ?
+            SET done = ?, updated_at = CURRENT_TIMESTAMP
             WHERE id = ?;
              """, params[1:2]
          )
     elif title is not None and done is not None:
         cursor.execute("""
       UPDATE tasks
-      SET title = ?, done = ?
+      SET title = ?, done = ?, updated_at = CURRENT_TIMESTAMP
       WHERE id = ?;
        """, params
    )
@@ -88,6 +91,7 @@ def update_task(id:int, title:str | None = None, done:int | None = None) -> dict
    if cursor.row_factory == 0:
       return {"status_code":404, "detail":"Unknown id"}
    return  {"status_code": 200, "detail": "Task updated sucessfully."}
+
 def delete_task(id:int) -> dict[str, Any]:
    cursor = connection.cursor()
    try:
@@ -106,4 +110,66 @@ def delete_task(id:int) -> dict[str, Any]:
    if cursor.rowcount == 0:
      return {"status_code":404, "detail":"Unknown id"}
    return {"status": 204, "detail": "No Content" }
+
+def search_in_title(search:str) -> list[dict[str, Any]] | None:
+   cursor = connection.cursor()
+   try:
+    cursor.execute("""
+   SELECT * FROM tasks 
+   WHERE title LIKE ?;
+""", ["%" + search.strip() + "%"])
+    selected = cursor.fetchall()
+    return [{**dict(row), "done": str(bool(row["done"]))} for row in selected]
+   except sqlite3.IntegrityError as e:
+      print(f"Error: Integrity constraint violated: {e}")
+   except sqlite3.OperationalError as e:
+        print(f"Error: Operational error: {e}")
+   except Exception as e:
+        print(f"An exception occurred: {e}")
+
+def filter_status(done:bool) -> list[dict[str, Any]] | None:
+   cursor = connection.cursor()
+   try:
+      cursor.execute("""
+      SELECT * FROM tasks 
+      WHERE done=?; 
+      """, [int(done)])
+      selected = cursor.fetchall()
+      return [{**dict(row), "done": str(bool(row["done"]))} for row in selected]
+   except sqlite3.IntegrityError as e:
+      print(f"Error: Integrity constraint violated: {e}")
+   except sqlite3.OperationalError as e:
+        print(f"Error: Operational error: {e}")
+   except Exception as e:
+        print(f"An exception occurred: {e}")
+def sort_alphabetically() -> list[dict[str, Any]] | None:
+   cursor = connection.cursor()
+   cursor.execute("""
+      SELECT * FROM tasks
+      GROUP BY title DESC;
+""")
+   sorted = cursor.fetchall()
+   return [{**dict(row), "done": str(bool(row["done"]))} for row in sorted]
+def stats() -> dict[str, Any]:
+   cursor = connection.cursor()
+   cursor.execute("""
+        SELECT COUNT(*)
+        FROM tasks;
+        """)
+   tasks = cursor.fetchone()
+   cursor.execute("""
+     SELECT COUNT(done) 
+     FROM tasks
+     WHERE done = 1;
+""")
+   done_tasks = cursor.fetchone()
+   cursor.execute("""
+        SELECT COUNT(done) 
+        FROM tasks
+        WHERE done = 0;
+   """)
+   not_done_tasks = cursor.fetchone()
+   return {"total": tasks[0], "done": done_tasks[0], "not done": not_done_tasks[0]}
+
+  
 set_up()
